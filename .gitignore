@@ -1,0 +1,41 @@
+# Standard Unreal Engine 5 project .gitignore
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+*.sln
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+.idea/
+
+# Unreal generated/intermediate
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vsconfig
+*.VC.db
+
+# Compiled source
+*.obj
+*.o
+*.pdb
+
+# Packaged builds
+Packaged/
+
+# Editor-generated
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+
+# OS files
+.DS_Store
+Thumbs.db
