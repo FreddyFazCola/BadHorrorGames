@@ -1,50 +1,50 @@
 # Arcaneum
 
-An original 3D open-world magic-academy RPG, built for Unreal Engine 5. Structurally inspired by Hogwarts Legacy (hub school → open-world region unlocks → house/faction system → companion-driven main quest → moral-choice antagonist arc) — **fully original IP**: no Harry Potter/Wizarding World names, characters, locations, or terminology anywhere in this project. See `Docs/STORY_BIBLE.md` for why that matters and what replaces it.
+An original 3D open-world magic-academy RPG, built for Unity. Structurally inspired by Hogwarts Legacy (hub school → open-world region unlocks → house/faction system → companion-driven main quest → moral-choice antagonist arc) — **fully original IP**: no Harry Potter/Wizarding World names, characters, locations, or terminology anywhere in this project. See `Docs/STORY_BIBLE.md` for why that matters and what replaces it.
+
+A playable browser vertical-slice of this same game (movement, spellcasting, a training trial) also exists as a Claude Artifact from earlier in this project's development, built in Three.js since it could actually run and be verified in that session. This repo is the longer-term Unity version, meant to eventually replace it.
 
 ## What's actually in this repo right now
 
-This was built in a cloud CLI session with no GPU and no Unreal Editor available — so it contains everything that's expressible as text (design docs, C++ gameplay systems, project scaffold) and nothing that requires the editor GUI (meshes, animations, materials, levels, VFX). Concretely:
+This was built in a cloud CLI session with no GPU and no Unity Editor available — so it contains everything that's expressible as text (design docs, C# gameplay systems, project scaffold) and nothing that requires the editor GUI (meshes, animations, materials, scenes, VFX, prefab wiring). Concretely:
 
 - **`Docs/`** — story bible, world/faction reference, full spell list with balancing numbers, and a mission-by-mission main quest outline (14 missions across 3 acts).
-- **`Source/Arcaneum/`** — compilable-against-UE5.4-API C++ gameplay systems: spell casting (mana/cooldowns/data-driven spell definitions/projectiles), a data-table-driven quest state machine, branching dialogue, four-faction reputation tracking, a save-game payload struct, the player character (Enhanced Input-based movement/casting), and the game mode.
-- **`Config/`** — minimal `DefaultEngine.ini`/`DefaultGame.ini` so the project opens with sane defaults.
-- **`Content/`** — empty except for folder structure and `.gitkeep` placeholders. Binary Unreal assets (`.uasset`/`.umap`) can't be authored as text.
-- **`Arcaneum.uproject`** — targets Unreal Engine 5.4.
+- **`Assets/Scripts/`** — C# gameplay systems: spell casting (mana/cooldowns/data-driven spell definitions/projectiles), a ScriptableObject-driven quest state machine, branching dialogue, four-faction reputation tracking, a **working** JSON save/load system, third-person player movement + camera, and a practice-target interaction example.
+- **`Assets/ScriptableObjects/`, `Assets/Prefabs/`, `Assets/Animations/`, `Assets/Materials/`, `Assets/Audio/`, `Assets/Scenes/`, `Assets/UI/`** — empty except `.gitkeep` placeholders. Unity project/scene/asset files are binary and can't be authored as text; these folders mark where things go once you're working in the Editor.
 
-**Honest status: this is an unopened, uncompiled project.** No UE5 instance has built this code or run it. It's written to match documented UE5.4 C++ conventions (verified against Epic's API patterns for Enhanced Input, `UPrimaryDataAsset`, `UGameInstanceSubsystem`, `FTableRowBase`, etc.), but the first thing to do locally is open it and fix whatever the compiler finds — treat that as expected, not a sign anything went wrong.
+**Honest status: no Unity Editor has opened or compiled this code.** It's written against stable, version-safe Unity APIs (legacy `Input` class rather than the newer Input System package, `CharacterController`, `MonoBehaviour`, `ScriptableObject`, `JsonUtility`) specifically to avoid depending on an engine version or package version I can't verify from this session — but the first time you open it in Unity, expect to fix whatever the compiler flags. That's normal, not a sign anything went wrong.
 
-## Prerequisites (do this first, on your own machine)
+### Why Unity instead of Unreal
 
-1. Install **Unreal Engine 5.4+** via the Epic Games Launcher (or build from source via the [Unreal Engine GitHub](https://github.com/EpicGames/UnrealEngine) if you're enrolled in Epic's GitHub program).
-2. Install **Visual Studio 2022** (Windows, with the "Game development with C++" workload) or **Xcode**/a configured toolchain (Mac/Linux) — required to compile the C++ module.
-3. Free disk space: Epic's own hardware/software specification page recommends **~100GB free on an SSD** for a full engine + project setup (the editor binaries alone are ~30-50GB; the rest is derived data cache, intermediate build files, and project content) — this is why the project couldn't be built out in the cloud session that produced this code. [Epic's official spec page](https://dev.epicgames.com/documentation/en-us/unreal-engine/hardware-and-software-specifications-for-unreal-engine).
-4. A GPU with DirectX 12 support and 6GB+ VRAM (Epic's recommended minimum).
+This project's first pass targeted Unreal Engine 5; the C++ scaffold was dropped in favor of this Unity version by request. Nothing about the story, world, spells, or quest design changed — only the engine and the code implementing it. The `Docs/` folder was always engine-agnostic and needed no rewrite.
 
-## Opening the project
+## Prerequisites (do this on your own machine — not possible in this session)
 
-1. Right-click `Arcaneum.uproject` → **Generate Visual Studio project files** (Windows) or run `UnrealBuildTool` equivalently on Mac/Linux.
-2. Open the generated `.sln`/workspace, or just double-click `Arcaneum.uproject` — UE5 will offer to build missing modules automatically the first time.
-3. Expect compile errors on the first attempt. Nobody has compiled this against a real engine install yet; work through them class by class — the code was written against documented 5.4 APIs but small signature drift between engine point releases is normal and expected.
+1. Install **Unity Hub**, then a recent **Unity 6 LTS** (or 2022 LTS) release through it.
+2. Create a **new 3D (URP) project** in Unity Hub — this generates the `ProjectSettings/`, `Packages/`, and `Library/` folders this repo deliberately does not include (they're per-install/auto-generated, not something to hand-author or commit).
+3. Copy this repo's `Assets/Scripts/` folder (and the empty `Assets/*` subfolders if you want the structure) into that new project's `Assets/` folder.
+4. A GPU capable of running the Unity Editor (basically any GPU from the last decade; nothing exotic required, unlike Unreal's heavier baseline).
 
-## The C++/Blueprint split (how you actually build the game from here)
+## The C#/Inspector split (how you actually build the game from here)
 
-Real UE5 productions split work this way, and this project assumes you will too:
+- **C# (`Assets/Scripts/`, done)** owns gameplay *rules*: how spells cost mana and go on cooldown, how quests advance, how dialogue branches, how faction reputation is tracked, and (unlike the earlier Unreal version) a fully working save/load system.
+- **Prefabs + ScriptableObject assets + scenes (not started)** own *presentation*: which model a character uses, which animation plays on cast, what a spell's particle effect looks like, how a level is laid out.
 
-- **C++ (`Source/Arcaneum/`, done)** owns gameplay *rules*: how spells cost mana and go on cooldown, how quests advance, how dialogue branches, how faction reputation is tracked, what gets saved.
-- **Blueprints + assets (`Content/`, not started)** own *presentation*: which mesh a character uses, which animation plays when a spell is cast, what a spell's particle effect looks like, how a level is laid out.
+Concretely:
+- **Spells**: right-click in `Assets/ScriptableObjects/Spells/` → Create → Arcaneum → Spell Definition, one per entry in `Docs/SPELL_LIST.md`. Assign `castEffectPrefab`, `castSound`, and (for non-instant spells) a `projectilePrefab` — a prefab with `SpellProjectile.cs` on it plus a trigger `Collider` and `Rigidbody`.
+- **Quests**: right-click in `Assets/ScriptableObjects/Quests/` → Create → Arcaneum → Quest Definition, one per mission in `Docs/QUEST_OUTLINE.md`. Assign all of them to a `QuestManager` component in your scene.
+- **Dialogue**: create a `DialogueTree` asset per conversation, attach `DialogueRunner` to the NPC's GameObject, and build a UI (Canvas + TextMeshPro) that listens to its `onLineChanged`/`onDialogueEnded` events.
+- **Player**: create a prefab with `CharacterController`, `SpellCasting`, and `PlayerController` on it, plus a `FactionReputation` component; assign the imported character model as a child, and its `Animator` alongside `SpellCasting`'s `castAnimationTrigger` names.
 
-Concretely, for each C++ base class you'll create a Blueprint child in `Content/Blueprints/` (e.g. `BP_ArcaneumCharacter` extends `AArcaneumCharacter`) and assign the asset-reference properties that are deliberately left blank in code:
-- `AArcaneumCharacter`: skeletal mesh, `DefaultMappingContext` + the six `UInputAction` properties (create these as Input Action/Input Mapping Context assets via right-click → Input in the Content Browser — Enhanced Input assets are binary and can't be authored as text).
-- `USpellDefinition` (create one data asset instance per spell in `Docs/SPELL_LIST.md`): `CastMontage`, `CastEffect` (Niagara system), `CastSound`, and for projectile spells, a `ASpellProjectileBase` Blueprint child with a mesh/trail assigned.
-- `UDialogueComponent` / `UQuestManagerSubsystem`: create `DataTable` assets using row structs `FDialogueLine` and `FQuestDefinitionRow` respectively, and author the actual mission/conversation content from `Docs/QUEST_OUTLINE.md` into them.
+## Asset pipeline (licensed packs)
 
-## Asset pipeline (licensed packs — the decision already made for this project)
+Since hand-sculpting AAA character models/animations isn't something producible in a coding session, source them commercially. Verified-real starting points for this specific game (fantasy academy, medieval-ish):
 
-Since hand-sculpting AAA character models/animations isn't something producible in a coding session, source them commercially:
-- **Animation:** [Mixamo](https://www.mixamo.com) (free, Adobe-owned) for rigged humanoid locomotion/combat/cast animations — the standard free starting point for indie UE5 projects.
-- **Characters/environments:** [Fab](https://www.fab.com) (Epic's unified marketplace, formerly Unreal Marketplace + Sketchfab Store + Quixel), or [Synty Studios](https://syntystore.com)' POLYGON packs if you want a cohesive stylized-low-poly look — a popular, budget-realistic choice for solo/small-team Steam titles because it sidesteps the "mismatched asset flip" look that hurts a lot of asset-pack-built indie games.
-- **License check before shipping:** every asset pack's EULA needs to explicitly permit commercial/Steam redistribution. Marketplace/Fab standard licenses generally do; double-check anything sourced elsewhere (itch.io, free model sites) individually.
+- **Characters** — Synty Studios' stylized low-poly line: [POLYGON – Fantasy Characters Pack](https://syntystore.com/products/polygon-fantasy-characters-pack), [POLYGON – Fantasy Kingdom](https://www.fab.com/listings/3d968be5-531f-4f6c-abf9-1a799dca2641), [POLYGON – Modular Fantasy Hero Characters](https://syntystore.com/products/polygon-modular-fantasy-hero-characters).
+- **Environments** — [Fantasy Castle Environment](https://www.fab.com/listings/a349250d-e253-419c-bd5e-6afae4e4620a) (Unity + Unreal, URP/HDRP/Built-in), [Modular Castle & Dungeon (Castle of Eternal Mist)](https://www.fab.com/listings/580d5f13-5e27-4f99-8b6b-a2223874d7cc), [Fantasy Medieval Interior Modular Kit](https://www.fab.com/listings/485e962b-2215-48a6-8284-1d6d287bff4d) (explicitly includes wizard studies, libraries, occult chambers).
+- **Animation** — [Mixamo](https://www.mixamo.com) (free, Adobe): upload a humanoid character, it auto-rigs, and you download free mocap animations that map directly onto Unity's Humanoid/Mecanim system.
+- **License check before shipping:** every asset's license needs to explicitly permit commercial/Steam redistribution. Marketplace/Fab standard licenses generally do; double-check anything sourced elsewhere individually.
+- **Getting assets into this project:** downloading from FAB requires your own Epic account and accepting that asset's license — that step can't be done on your behalf. Download locally, then either drop the FBX/GLB straight into your Unity project, or upload it into a chat with me if you want it referenced/discussed first.
 
 ## Steam publishing facts (verified, not guessed)
 
@@ -54,26 +54,27 @@ Since hand-sculpting AAA character models/animations isn't something producible 
 
 ## What's deliberately not started yet (realistic scope check)
 
-"Huge, Hogwarts-Legacy-quality" is a ~450-person, multi-year, hundred-million-dollar production (Avalanche Software). This scaffold is a realistic starting *skeleton*, not a finished game. Not yet built, and each is a real chunk of work:
+"Huge, Hogwarts-Legacy-quality" is a ~450-person, multi-year, hundred-million-dollar production (Avalanche Software). This scaffold is a realistic starting *skeleton*, not a finished game. Not yet built:
 - Any actual level geometry, lighting, or the open-world regions described in `Docs/WORLD_AND_FACTIONS.md`.
-- UMG UI (HUD, dialogue box, quest log, spell wheel) — components broadcast the delegates a UI would bind to, but no widgets exist.
-- Save/load manager gluing `UArcaneumSaveGame` to the quest/spell/faction systems (the struct exists; nothing populates or reads it yet).
+- UI (HUD, dialogue box, quest log, spell wheel) — components fire the C# events a UI would bind to, but no Canvas/widgets exist.
+- The menu/save-slot flow that actually calls `SaveLoadManager` and restores state into `QuestManager`/`SpellCasting`/`FactionReputation` — the save system itself works, nothing calls it yet.
 - Combat AI/enemy classes, the Draughts (potion-equivalent) crafting system mentioned in the story bible, companion AI.
-- Everything in `Content/`.
+- Everything under `Assets/Prefabs`, `Assets/Animations`, `Assets/Materials`, `Assets/Audio`, `Assets/Scenes`, `Assets/UI`.
 
 ## Repo layout
 ```
-Arcaneum.uproject
-Source/Arcaneum/
-  Core/            -- ArcaneumGameMode
-  Player/          -- ArcaneumCharacter (movement, Enhanced Input, spell-cast input)
-  Spells/          -- SpellDefinition (data asset), SpellCastingComponent, SpellProjectileBase
-  Quests/          -- QuestTypes, QuestManagerSubsystem
-  Dialogue/        -- DialogueTypes, DialogueComponent
-  Progression/     -- FactionReputationComponent (the four Orders)
-  SaveSystem/      -- ArcaneumSaveGame
-Config/            -- DefaultEngine.ini, DefaultGame.ini
-Content/           -- empty scaffold, see Content/README_ContentFolder.md
+Assets/
+  Scripts/
+    Core/            -- GameManager
+    Player/          -- PlayerController, ThirdPersonCamera
+    Spells/          -- SpellDefinition, SpellCasting, SpellProjectile, SpellCategory
+    Quests/          -- QuestTypes, QuestDefinition, QuestManager
+    Dialogue/        -- DialogueTypes, DialogueTree, DialogueRunner
+    Progression/     -- FactionReputation (the four Orders)
+    SaveSystem/      -- SaveData, SaveLoadManager (working JSON save/load)
+    Interaction/     -- IDamageable, PracticeWard
+  ScriptableObjects/ -- Spells/, Quests/, Dialogue/ (empty; create assets here in-editor)
+  Prefabs/, Animations/, Materials/, Audio/, Scenes/, UI/ -- empty scaffold
 Docs/
   STORY_BIBLE.md
   WORLD_AND_FACTIONS.md

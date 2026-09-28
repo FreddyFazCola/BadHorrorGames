@@ -1,6 +1,6 @@
 # Arcaneum — Spell List & Progression
 
-Five tiers, gated by main-quest chapter (see `QUEST_OUTLINE.md`). Four categories map directly to the `ESpellCategory` enum in code: **Cantrip** (utility), **Binding** (offense/debuff), **Warding** (defense/control), **Conjury** (summon/ultimate). Each spell is authored as one `USpellDefinition` data asset (see `Source/Arcaneum/Spells/SpellDefinition.h`) — designers add new spells in-editor without touching code.
+Five tiers, gated by main-quest chapter (see `QUEST_OUTLINE.md`). Four categories map directly to the `SpellCategory` enum in code: **Cantrip** (utility), **Binding** (offense/debuff), **Warding** (defense/control), **Conjury** (summon/ultimate). Each spell is authored as one `SpellDefinition` ScriptableObject asset (see `Assets/Scripts/Spells/SpellDefinition.cs`) — designers add new spells in the Unity Inspector without touching code.
 
 Balancing numbers below are starting points for playtesting, not final.
 
@@ -44,4 +44,4 @@ Balancing numbers below are starting points for playtesting, not final.
 
 ## Design notes
 - Every Order grants one **Order-flavored recolor/variant** of a Tier-2+ spell (visual + minor secondary effect only, to keep balance flat across Order choice).
-- Spells are unlocked via `UQuestManagerSubsystem` completing a specific quest stage, not via a generic XP/level number — keeps spell-gating tied to story pacing (matches Hogwarts Legacy's approach of teaching spells through named quests rather than a level-up screen).
+- Spells are unlocked via `QuestManager` completing a specific quest stage, not via a generic XP/level number — keeps spell-gating tied to story pacing (matches Hogwarts Legacy's approach of teaching spells through named quests rather than a level-up screen).

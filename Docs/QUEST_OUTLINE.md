@@ -29,4 +29,4 @@
 - Thistlewick shop/vendor quest hooks (lightweight, flavor-only).
 
 ## Implementation note
-All of the above is authored as **data**, not hardcoded flow: `Source/Arcaneum/Quests/QuestTypes.h` defines `FQuestDefinition`/`FQuestStage` as `UDataTable` rows, and `UQuestManagerSubsystem` drives state from that table. Adding/editing missions is a data-table edit in the Unreal Editor, not a C++ change.
+All of the above is authored as **data**, not hardcoded flow: `Assets/Scripts/Quests/QuestDefinition.cs` defines each quest as a ScriptableObject holding a list of `QuestStage` entries, and `QuestManager` drives runtime state from those assets. Adding/editing missions means creating/editing a Quest Definition asset in the Unity Editor, not a C# change.
