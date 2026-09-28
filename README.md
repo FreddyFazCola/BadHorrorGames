@@ -40,11 +40,16 @@ Concretely:
 
 Since hand-sculpting AAA character models/animations isn't something producible in a coding session, source them commercially. Verified-real starting points for this specific game (fantasy academy, medieval-ish):
 
-- **Characters** — Synty Studios' stylized low-poly line: [POLYGON – Fantasy Characters Pack](https://syntystore.com/products/polygon-fantasy-characters-pack), [POLYGON – Fantasy Kingdom](https://www.fab.com/listings/3d968be5-531f-4f6c-abf9-1a799dca2641), [POLYGON – Modular Fantasy Hero Characters](https://syntystore.com/products/polygon-modular-fantasy-hero-characters).
-- **Environments** — [Fantasy Castle Environment](https://www.fab.com/listings/a349250d-e253-419c-bd5e-6afae4e4620a) (Unity + Unreal, URP/HDRP/Built-in), [Modular Castle & Dungeon (Castle of Eternal Mist)](https://www.fab.com/listings/580d5f13-5e27-4f99-8b6b-a2223874d7cc), [Fantasy Medieval Interior Modular Kit](https://www.fab.com/listings/485e962b-2215-48a6-8284-1d6d287bff4d) (explicitly includes wizard studies, libraries, occult chambers).
-- **Animation** — [Mixamo](https://www.mixamo.com) (free, Adobe): upload a humanoid character, it auto-rigs, and you download free mocap animations that map directly onto Unity's Humanoid/Mecanim system.
-- **License check before shipping:** every asset's license needs to explicitly permit commercial/Steam redistribution. Marketplace/Fab standard licenses generally do; double-check anything sourced elsewhere individually.
-- **Getting assets into this project:** downloading from FAB requires your own Epic account and accepting that asset's license — that step can't be done on your behalf. Download locally, then either drop the FBX/GLB straight into your Unity project, or upload it into a chat with me if you want it referenced/discussed first.
+**Free, prioritized per project preference:**
+- **Characters** — [Quaternius – RPG Character Pack](https://quaternius.com/packs/rpgcharacters.html): 6 fantasy characters, already rigged *and* animated (FBX/OBJ/Blend), free for commercial use. [Quaternius – Modular Character Outfits: Fantasy](https://quaternius.com/packs/modularcharacteroutfitsfantasy.html): 12 outfits, 62 modular pieces, same license.
+- **Environments** — [Kenney – Modular Dungeon Kit](https://kenney.nl/assets/modular-dungeon-kit): CC0 (public domain, no attribution required), dungeon/castle-building pieces.
+- **Animation (if a model isn't pre-animated)** — [Mixamo](https://www.mixamo.com) (free, Adobe): upload a humanoid character, it auto-rigs, and you download free mocap animations that map directly onto Unity's Humanoid/Mecanim system.
+- **Known tradeoff:** free assets are simpler and less varied than paid packs, and mixing pieces from two different free creators (e.g. Quaternius characters + Kenney environments) can look visually inconsistent since their art styles don't match exactly. Picking one creator's ecosystem where possible avoids that.
+
+**Paid alternative, for more variety/polish later** — Synty Studios' POLYGON line ([Fantasy Characters](https://syntystore.com/products/polygon-fantasy-characters-pack), [Fantasy Kingdom](https://www.fab.com/listings/3d968be5-531f-4f6c-abf9-1a799dca2641)) and FAB's [Fantasy Castle Environment](https://www.fab.com/listings/a349250d-e253-419c-bd5e-6afae4e4620a) are the more-polished, budget-friendly-but-not-free options if the above ever feels too limited.
+
+- **License check before shipping:** every asset's license needs to explicitly permit commercial/Steam redistribution. Kenney (CC0) and Quaternius (explicitly free for commercial use) are both clear on this; double-check anything else sourced elsewhere individually.
+- **Getting assets into this project:** download locally, then either drop the FBX/GLB straight into your Unity project, or upload it into a chat with me if you want it referenced/discussed first. (FAB specifically also requires your own Epic account and accepting that asset's license — that step can't be done on your behalf.)
 
 ## Steam publishing facts (verified, not guessed)
 
