@@ -59,12 +59,17 @@ Since hand-sculpting AAA character models/animations isn't something producible 
 
 ## What's deliberately not started yet (realistic scope check)
 
-"Huge, Hogwarts-Legacy-quality" is a ~450-person, multi-year, hundred-million-dollar production (Avalanche Software). This scaffold is a realistic starting *skeleton*, not a finished game. Not yet built:
+"Huge, Hogwarts-Legacy-quality" is a ~450-person, multi-year, hundred-million-dollar production (Avalanche Software). This scaffold is a realistic starting *skeleton*, not a finished game.
+
+**Now working**, beyond the original spell/quest/dialogue/faction/save systems:
+- `Assets/Scripts/UI/HUDController.cs` — a **functional** HUD (mana bar, health bar, quest objective text, a branching dialogue panel) built entirely at runtime from code. No Canvas prefab or TextMeshPro needed; it uses legacy `UnityEngine.UI` so there's zero package-import dependency. It's deliberately plain (flat-colored bars, default font) -- replace it with a real artist-built UI once one exists, but the events it listens to (`SpellCasting.onManaChanged`, `QuestManager.onQuestStarted`, `DialogueRunner.onLineChanged`, etc.) are now visibly wired up, not just broadcasting into nothing.
+- `Assets/Scripts/Progression/PlayerHealth.cs` + `Assets/Scripts/Interaction/EnemyController.cs` — a basic damage loop: enemies patrol/chase/attack (plain Transform movement, no NavMeshAgent, so it needs no baked NavMesh or extra package), and both the player and enemies take damage through the same `IDamageable` interface `SpellProjectile` already used against `PracticeWard`. See `Docs/BESTIARY.md` for the enemy roster this is designed to drive.
+
+**Still not started**:
 - Any actual level geometry, lighting, or the open-world regions described in `Docs/WORLD_AND_FACTIONS.md`.
-- UI (HUD, dialogue box, quest log, spell wheel) — components fire the C# events a UI would bind to, but no Canvas/widgets exist.
 - The menu/save-slot flow that actually calls `SaveLoadManager` and restores state into `QuestManager`/`SpellCasting`/`FactionReputation` — the save system itself works, nothing calls it yet.
-- Combat AI/enemy classes, the Draughts (potion-equivalent) crafting system mentioned in the story bible, companion AI.
-- Everything under `Assets/Prefabs`, `Assets/Animations`, `Assets/Materials`, `Assets/Audio`, `Assets/Scenes`, `Assets/UI`.
+- The Draughts (potion-equivalent) crafting system mentioned in the story bible, companion AI, a ranged/spellcasting enemy variant (noted as an extension point in `Docs/BESTIARY.md`).
+- Everything under `Assets/Prefabs`, `Assets/Animations`, `Assets/Materials`, `Assets/Scenes` -- and most of `Assets/Audio`/`Assets/UI` (the Kenney particle sprites in `Assets/VFX` are real assets now, just not wired into any `SpellDefinition.castEffectPrefab` yet since that needs a Particle System prefab built in-editor).
 
 ## Repo layout
 ```
@@ -75,14 +80,18 @@ Assets/
     Spells/          -- SpellDefinition, SpellCasting, SpellProjectile, SpellCategory
     Quests/          -- QuestTypes, QuestDefinition, QuestManager
     Dialogue/        -- DialogueTypes, DialogueTree, DialogueRunner
-    Progression/     -- FactionReputation (the four Orders)
+    Progression/     -- FactionReputation (the four Orders), PlayerHealth
     SaveSystem/      -- SaveData, SaveLoadManager (working JSON save/load)
-    Interaction/     -- IDamageable, PracticeWard
+    Interaction/     -- IDamageable, PracticeWard, EnemyController
+    UI/              -- HUDController (runtime-built, working)
   ScriptableObjects/ -- Spells/, Quests/, Dialogue/ (empty; create assets here in-editor)
-  Prefabs/, Animations/, Materials/, Audio/, Scenes/, UI/ -- empty scaffold
+  VFX/               -- KenneyParticlePack (80 CC0 sprites, real assets, not yet wired to a prefab)
+  Prefabs/, Animations/, Materials/, Scenes/ -- empty scaffold
+  Audio/, UI/ (non-script)-- empty scaffold
 Docs/
   STORY_BIBLE.md
   WORLD_AND_FACTIONS.md
   SPELL_LIST.md
   QUEST_OUTLINE.md
+  BESTIARY.md
 ```
