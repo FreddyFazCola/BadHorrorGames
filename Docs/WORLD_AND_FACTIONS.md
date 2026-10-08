@@ -29,8 +29,8 @@ Sorting happens narratively in mission 1 based on a short dialogue-driven "trial
 
 ## Companions (party/relationship system)
 1. **Fenn Oakstave** (Kindred, disguised) — full main-quest-integrated companion arc.
-2. **Isra Vance** (Order of Ember rival-turned-ally, combat-focused) — recruited via Ember loyalty questline.
-3. **Bren Calder** (Order of Root, crafting/Draughts specialist) — recruited via Root loyalty questline.
+2. **Isra Vance** (Order of Ember rival-turned-ally, combat-focused) — recruited via Ember loyalty questline ("The Forge-Tower Wager," see Docs/QUEST_OUTLINE.md). Personal quest, **"The Duelist's Debt"**: Isra's reputation for recklessness traces back to a duel that went wrong and cost someone their place at the Academy; she wants to make it right before Act 3, and asks the player to help track that person down in Thistlewick.
+3. **Bren Calder** (Order of Root, crafting/Draughts specialist) — recruited via Root loyalty questline ("Roots That Hold"). Personal quest, **"What the Greenhouse Remembers"**: the blight from the Root loyalty quest wasn't natural -- it's the same strain of corruption described in the Drowned Vale, meaning it reached the greenhouse decades before the player ever sensed the Deep Weave. Bren wants to know how, and the answer ties back to Provost Marrow's generation. Mechanically, this is where the player first unlocks `DraughtRecipe`/`DraughtBrewingStation` (see `Assets/Scripts/Progression/`).
 4. Two romanceable companions among the above, gated by dialogue choices across acts 1–2 (kept lightweight: a handful of flagged conversations, not a full relationship-meter system, to stay within realistic scope).
 
 ## Collectibles / world-building systems

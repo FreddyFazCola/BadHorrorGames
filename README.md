@@ -64,11 +64,14 @@ Since hand-sculpting AAA character models/animations isn't something producible 
 **Now working**, beyond the original spell/quest/dialogue/faction/save systems:
 - `Assets/Scripts/UI/HUDController.cs` — a **functional** HUD (mana bar, health bar, quest objective text, a branching dialogue panel) built entirely at runtime from code. No Canvas prefab or TextMeshPro needed; it uses legacy `UnityEngine.UI` so there's zero package-import dependency. It's deliberately plain (flat-colored bars, default font) -- replace it with a real artist-built UI once one exists, but the events it listens to (`SpellCasting.onManaChanged`, `QuestManager.onQuestStarted`, `DialogueRunner.onLineChanged`, etc.) are now visibly wired up, not just broadcasting into nothing.
 - `Assets/Scripts/Progression/PlayerHealth.cs` + `Assets/Scripts/Interaction/EnemyController.cs` — a basic damage loop: enemies patrol/chase/attack (plain Transform movement, no NavMeshAgent, so it needs no baked NavMesh or extra package), and both the player and enemies take damage through the same `IDamageable` interface `SpellProjectile` already used against `PracticeWard`. See `Docs/BESTIARY.md` for the enemy roster this is designed to drive.
+- `Assets/Scripts/Progression/DraughtRecipe.cs` + `DraughtBrewingStation.cs` — the Draughts crafting system from the story bible: recipes are ScriptableObject assets, brewing is a coroutine with an ingredient-count check, and `SpellCasting.RestoreMana()` / `PlayerHealth.Heal()` apply the result. Feeds into Bren Calder's personal quest (Docs/WORLD_AND_FACTIONS.md).
+- `Assets/Scripts/Interaction/SunderingShard.cs` — the ~40 lore-collectible pickups from Docs/WORLD_AND_FACTIONS.md; a trigger pickup that reports its id and removes itself. Where collected ids persist (save file, log UI) isn't built yet.
+- `Assets/Fonts/Cinzel/` — a real font (Cinzel, SIL Open Font License, pulled from Google's official `google/fonts` GitHub repo), optionally assignable to `HUDController.customFont` instead of the Unity default.
 
 **Still not started**:
 - Any actual level geometry, lighting, or the open-world regions described in `Docs/WORLD_AND_FACTIONS.md`.
 - The menu/save-slot flow that actually calls `SaveLoadManager` and restores state into `QuestManager`/`SpellCasting`/`FactionReputation` — the save system itself works, nothing calls it yet.
-- The Draughts (potion-equivalent) crafting system mentioned in the story bible, companion AI, a ranged/spellcasting enemy variant (noted as an extension point in `Docs/BESTIARY.md`).
+- Companion AI, a ranged/spellcasting enemy variant (noted as an extension point in `Docs/BESTIARY.md`), a UI for Sundering Shard log entries.
 - Everything under `Assets/Prefabs`, `Assets/Animations`, `Assets/Materials`, `Assets/Scenes` -- and most of `Assets/Audio`/`Assets/UI` (the Kenney particle sprites in `Assets/VFX` are real assets now, just not wired into any `SpellDefinition.castEffectPrefab` yet since that needs a Particle System prefab built in-editor).
 
 ## Repo layout
@@ -80,12 +83,13 @@ Assets/
     Spells/          -- SpellDefinition, SpellCasting, SpellProjectile, SpellCategory
     Quests/          -- QuestTypes, QuestDefinition, QuestManager
     Dialogue/        -- DialogueTypes, DialogueTree, DialogueRunner
-    Progression/     -- FactionReputation (the four Orders), PlayerHealth
+    Progression/     -- FactionReputation (the four Orders), PlayerHealth, DraughtRecipe, DraughtBrewingStation
     SaveSystem/      -- SaveData, SaveLoadManager (working JSON save/load)
-    Interaction/     -- IDamageable, PracticeWard, EnemyController
+    Interaction/     -- IDamageable, PracticeWard, EnemyController, SunderingShard
     UI/              -- HUDController (runtime-built, working)
   ScriptableObjects/ -- Spells/, Quests/, Dialogue/ (empty; create assets here in-editor)
   VFX/               -- KenneyParticlePack (80 CC0 sprites, real assets, not yet wired to a prefab)
+  Fonts/             -- Cinzel (OFL-licensed, real font)
   Prefabs/, Animations/, Materials/, Scenes/ -- empty scaffold
   Audio/, UI/ (non-script)-- empty scaffold
 Docs/

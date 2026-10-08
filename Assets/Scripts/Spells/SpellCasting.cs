@@ -67,6 +67,14 @@ namespace Arcaneum
         public bool IsSpellOnCooldown(SpellDefinition spell) =>
             spell != null && cooldownRemaining.TryGetValue(spell, out var remaining) && remaining > 0f;
 
+        /// <summary>Instant mana restore (a Draught, a shrine, etc.) -- separate from the passive per-second regen.</summary>
+        public void RestoreMana(float amount)
+        {
+            if (amount <= 0f) return;
+            currentMana = Mathf.Min(maxMana, currentMana + amount);
+            onManaChanged?.Invoke(maxMana > 0f ? currentMana / maxMana : 0f);
+        }
+
         /// <summary>Called by QuestManager (via a listener) when a mission teaches a new spell.</summary>
         public bool LearnSpell(SpellDefinition spell)
         {

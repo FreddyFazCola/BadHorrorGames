@@ -24,6 +24,10 @@ namespace Arcaneum
         public PlayerHealth playerHealth;
         public string trackedMainQuestId = "Q01_LateAdmission";
 
+        [Header("Optional styling")]
+        [Tooltip("Assign Assets/Fonts/Cinzel/Cinzel-Variable.ttf for a fantasy-styled HUD; falls back to Unity's built-in font if left empty.")]
+        public Font customFont;
+
         private Image manaFill;
         private Image healthFill;
         private Text questText;
@@ -39,7 +43,7 @@ namespace Arcaneum
 
         private void Awake()
         {
-            uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            uiFont = customFont != null ? customFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             BuildCanvas();
         }
 
