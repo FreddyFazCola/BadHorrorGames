@@ -51,6 +51,22 @@ Since hand-sculpting AAA character models/animations isn't something producible 
 - **License check before shipping:** every asset's license needs to explicitly permit commercial/Steam redistribution. Kenney (CC0) and Quaternius (explicitly free for commercial use) are both clear on this; double-check anything else sourced elsewhere individually.
 - **Getting assets into this project:** download locally, then either drop the FBX/GLB straight into your Unity project, or upload it into a chat with me if you want it referenced/discussed first. (FAB specifically also requires your own Epic account and accepting that asset's license — that step can't be done on your behalf.)
 
+### Real assets already in this repo
+
+All of the below were pulled directly from each project's official (or, where noted, a verified-license community-maintained) GitHub repository, since this container can reach github.com even though it can't reach kenney.nl/itch.io/quaternius.com directly. Every pack's own license file is included alongside it under its folder.
+
+| Folder | Source | License | Contents |
+|---|---|---|---|
+| `Assets/Environments/KayKitDungeon/` | [KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0](https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0) | CC0 | 203 stylized dungeon props (FBX): walls, floors, tables, chests, banners, columns, bottles |
+| `Assets/Environments/GobkitNature/` | [Ariescar/gobkit-free-assets](https://github.com/Ariescar/gobkit-free-assets) (nature/) | CC0 | 41 low-poly nature props (GLB): trees, rocks, cliffs, mountains, grass, clouds -- fits Larkmoor Fens/Ashcombe Highlands |
+| `Assets/Characters/GobkitCreatures/` | same repo (animal/, minion/) | CC0 | Rigged animal + minion-style creature models (GLB) -- candidates for Bestiary-style enemies beyond the humanoid Ashbound roster |
+| `Assets/Animations/QuaterniusUniversalLibrary/` | [J-Ponzo/gltf-universal-animation-library](https://github.com/J-Ponzo/gltf-universal-animation-library) | CC0 | Quaternius's Universal Animation Library (glTF), built for their standard humanoid rig -- **not yet verified to retarget cleanly onto the RPG Character Pack's "Humanoid Rig Versions" skeletons**; open both in Blender to confirm bone-name compatibility before relying on it |
+| `Assets/Audio/CC0Sounds/` | [lavenderdotpet/CC0-Public-Domain-Sounds](https://github.com/lavenderdotpet/CC0-Public-Domain-Sounds) (6 subfolders only -- the full repo is 2.6GB, not worth cloning wholesale) | CC0 | RPG-SFX, Kenney RPG/Interface/Impact/MusicJingle audio, creature SFX -- real candidates for `SpellDefinition.castSound` and UI feedback |
+| `Assets/VFX/KenneyParticlePack/` | [Calinou/kenney-particle-pack](https://github.com/Calinou/kenney-particle-pack) | CC0 | 80 particle sprites (fire/smoke/magic/sparks) -- from an earlier session |
+| `Assets/Fonts/Cinzel/` | [google/fonts](https://github.com/google/fonts) (ofl/cinzel/, sparse checkout) | SIL OFL 1.1 | The HUD's optional display font -- from an earlier session |
+
+None of this is wired into gameplay yet (no prefabs, no Animator Controllers, no `SpellDefinition`/`DraughtRecipe` assets referencing these files) -- that step needs the Unity Editor. What exists now is real, correctly-licensed source material sitting in the right folders, which is the part that didn't need the Editor.
+
 ## Steam publishing facts (verified, not guessed)
 
 - Steam Direct's submission fee is **$100 per app, one-time, recoupable** once the game reaches **$1,000 in adjusted gross revenue** on the store — refunded as a line item in a later payment report, not upfront. [Steamworks partner documentation](https://partner.steamgames.com/doc/gettingstarted/appfee).
