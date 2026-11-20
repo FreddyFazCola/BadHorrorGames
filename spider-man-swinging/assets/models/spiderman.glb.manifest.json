@@ -1,0 +1,30 @@
+{
+  "parts": [
+    "spiderman.glb.b64.part00.txt",
+    "spiderman.glb.b64.part01.txt",
+    "spiderman.glb.b64.part02.txt",
+    "spiderman.glb.b64.part03.txt",
+    "spiderman.glb.b64.part04.txt",
+    "spiderman.glb.b64.part05.txt",
+    "spiderman.glb.b64.part06.txt",
+    "spiderman.glb.b64.part07.txt",
+    "spiderman.glb.b64.part08.txt",
+    "spiderman.glb.b64.part09.txt",
+    "spiderman.glb.b64.part10.txt",
+    "spiderman.glb.b64.part11.txt",
+    "spiderman.glb.b64.part12.txt",
+    "spiderman.glb.b64.part13.txt",
+    "spiderman.glb.b64.part14.txt",
+    "spiderman.glb.b64.part15.txt",
+    "spiderman.glb.b64.part16.txt",
+    "spiderman.glb.b64.part17.txt",
+    "spiderman.glb.b64.part18.txt",
+    "spiderman.glb.b64.part19.txt",
+    "spiderman.glb.b64.part20.txt",
+    "spiderman.glb.b64.part21.txt",
+    "spiderman.glb.b64.part22.txt",
+    "spiderman.glb.b64.part23.txt"
+  ],
+  "encoding": "base64",
+  "bytes": 1694012
+}

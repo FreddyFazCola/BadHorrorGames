@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Web Rush — A Spider-Man Swinging Game</title>
+  <link rel="stylesheet" href="src/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="viewport"></canvas>
+
+  <div id="ui-root">
+    <!-- Main menu -->
+    <section id="menu-screen" class="screen">
+      <div class="menu-panel">
+        <h1 class="title"><span class="title-web">WEB</span> RUSH</h1>
+        <p class="subtitle">a homemade Spider-Man swinging prototype</p>
+
+        <div class="menu-actions">
+          <button id="btn-play" class="btn btn-primary">Play</button>
+          <button id="btn-controls" class="btn">Controls</button>
+        </div>
+
+        <p class="hint">Click Play, then click the city to lock your mouse.</p>
+      </div>
+    </section>
+
+    <!-- Controls overlay -->
+    <section id="controls-screen" class="screen hidden">
+      <div class="menu-panel">
+        <h2>Controls</h2>
+        <ul class="controls-list">
+          <li><span class="key">W A S D</span> Run around</li>
+          <li><span class="key">Mouse</span> Look / aim</li>
+          <li><span class="key">Left Click (hold)</span> Shoot web & swing</li>
+          <li><span class="key">W / S</span> Reel the web in / out while swinging</li>
+          <li><span class="key">Space</span> Jump — or release a swing with an upward boost</li>
+          <li><span class="key">Space</span> <b>Perfect release</b> — let go at the flat, fast part of the arc</li>
+          <li><span class="key">S</span> (airborne) Dive — trade height for speed, then swing out of it</li>
+          <li><span class="key">Touch a wall</span> Stick to it — W/S climb, A/D crawl, Space jumps off</li>
+          <li><span class="key">Q</span> Web-zip to your aim point</li>
+          <li><span class="key">Right Click (hold)</span> Aim</li>
+          <li><span class="key">C</span> Dodge — time it to your spidey sense for a perfect dodge</li>
+          <li><span class="key">Shift</span> Sprint on the ground</li>
+          <li><span class="key">Esc</span> Pause / unlock mouse</li>
+        </ul>
+        <h2>Controller (DualSense / any standard gamepad)</h2>
+        <ul class="controls-list">
+          <li><span class="key">Left Stick</span> Run around</li>
+          <li><span class="key">Right Stick</span> Look / aim</li>
+          <li><span class="key">R2 (hold)</span> Shoot web & swing</li>
+          <li><span class="key">Left Stick</span> Reel the web in / out while swinging</li>
+          <li><span class="key">Cross ✕</span> Jump — or release a swing with an upward boost</li>
+          <li><span class="key">Cross ✕</span> Perfect release at the bottom of the arc</li>
+          <li><span class="key">Left Stick down</span> (airborne) Dive</li>
+          <li><span class="key">R1</span> Web-zip to your aim point</li>
+          <li><span class="key">L2 (hold)</span> Aim</li>
+          <li><span class="key">Circle ○</span> Dodge — time it to your spidey sense for a perfect dodge</li>
+          <li><span class="key">Square ▢</span> / <span class="key">E</span> Punch</li>
+          <li><span class="key">L1 / L3</span> Sprint on the ground</li>
+          <li><span class="key">Options</span> Pause</li>
+        </ul>
+        <p class="hint">A connected gamepad gets basic rumble; a DualSense also gets R2 trigger feedback while swinging - Chrome/Edge only, no setup needed.</p>
+        <button id="btn-connect-dualsense" class="btn">Connect DualSense (HID) for real adaptive-trigger resistance</button>
+        <p class="hint">Works wired or wirelessly - once paired to your system over Bluetooth, this connects to it the same way. (Raw in-page Bluetooth can't reach a controller's HID reports at all - browsers block that on purpose; see the README.)</p>
+        <p id="dualsense-hid-status" class="hint"></p>
+        <div class="menu-actions">
+          <button id="btn-test-trigger" class="btn" disabled>Test trigger resistance (R2)</button>
+          <button id="btn-cycle-effect" class="btn" disabled>Try a different effect encoding</button>
+        </div>
+        <p id="trigger-test-status" class="hint"></p>
+        <button id="btn-controls-back" class="btn btn-primary">Back</button>
+      </div>
+    </section>
+
+    <!-- Game over -->
+    <section id="gameover-screen" class="screen hidden">
+      <div class="menu-panel">
+        <h1 class="title gameover-title">TAKEN DOWN</h1>
+        <p class="subtitle">The thugs got the better of you this time.</p>
+        <p class="gameover-stat">Crimes stopped: <span id="gameover-crimes">0</span></p>
+        <div class="menu-actions">
+          <button id="btn-retry" class="btn btn-primary">Try Again</button>
+          <button id="btn-gameover-quit" class="btn">Quit to Menu</button>
+        </div>
+        <p class="hint">Tip: press <span class="key">C</span> / Circle to dodge when your spidey sense flares.</p>
+      </div>
+    </section>
+
+    <!-- Pause menu -->
+    <section id="pause-screen" class="screen hidden">
+      <div class="menu-panel">
+        <h2>Paused</h2>
+        <div class="menu-actions">
+          <button id="btn-resume" class="btn btn-primary">Resume</button>
+          <button id="btn-quit" class="btn">Quit to Menu</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- In-game HUD -->
+    <div id="hud" class="hidden">
+      <div id="crosshair"></div>
+      <div id="danger-vignette" class="danger-vignette"></div>
+      <div id="spidey-arrow" class="spidey-arrow"><span>▲</span></div>
+      <div id="prompt" class="prompt"></div>
+      <div id="stats" class="stats">
+        <div>Height: <span id="stat-height">0</span> m</div>
+        <div>Speed: <span id="stat-speed">0</span> m/s</div>
+      </div>
+      <div id="player-health-panel" class="player-health-panel">
+        <div class="player-health-label">Health</div>
+        <div id="player-health-track" class="player-health-track">
+          <div id="player-health-fill" class="player-health-fill"></div>
+        </div>
+      </div>
+      <div id="crime-panel" class="crime-panel">
+        <div id="crime-counts">Crimes stopped: <span id="crime-stopped">0</span></div>
+        <div id="crime-status" class="crime-status hidden"></div>
+        <div id="crime-progress-track" class="crime-progress-track hidden">
+          <div id="crime-progress-fill" class="crime-progress-fill"></div>
+        </div>
+      </div>
+      <div id="crime-toast" class="crime-toast hidden">Crime stopped!</div>
+      <div id="dodge-toast" class="dodge-toast hidden">PERFECT DODGE</div>
+      <div id="tip" class="tip">Hold Left Click to shoot a web and swing</div>
+    </div>
+  </div>
+
+  
+  
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
