@@ -1,0 +1,35 @@
+; Web Rush - Godot 4 remake.
+;
+; Hand-authored project file. Everything here is plain text on purpose so the
+; project can be version-controlled and diffed like source.
+
+config_version=5
+
+[application]
+
+config/name="Web Rush"
+config/description="Spider-Man style web-swinging across a procedural city."
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+
+[physics]
+
+; The whole swing was tuned against a fixed 120Hz step. Godot runs
+; _physics_process at exactly this rate, so the accumulator the browser build
+; needed disappears: delta is 1/120 every single call, which is why the rope
+; constraint is stable and nothing tunnels (~0.7m of travel per step even at
+; full speed, far smaller than any building).
+common/physics_ticks_per_second=120
+common/max_physics_steps_per_frame=8
+3d/default_gravity=0.0
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/screen_space_aa=1
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3

@@ -1,0 +1,5 @@
+# Godot's import cache and generated artefacts. Regenerated on open.
+.godot/
+export.cfg
+export_presets.cfg
+*.translation
