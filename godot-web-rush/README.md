@@ -123,6 +123,32 @@ were ~18 m across, narrower than one swing arc, so every attach ended in a
 facade. The 84 m grid took chained traversal from **50 m to ~420 m per 15
 seconds**, averaging ~28 m/s with peaks around 68.
 
+## The city
+
+Streamed in 84 m cells around the player, every cell's contents derived from a
+hash of its grid coordinates, so a cell rebuilt after you wander away and come
+back is identical rather than popping into a different skyline.
+
+Buildings share one unit cube scaled per instance and a small cache of facade
+materials bucketed by tint, window warmth and UV tiling. The first version
+built a fresh mesh and a fresh material per building, which at 13x13 streamed
+cells meant ~170 of each resident at all times, none able to batch. The cache
+collapses that to a few dozen shared materials, which is what makes the rooftop
+detail affordable.
+
+Above the roofline is where you spend the whole game, so the roofs are dressed:
+water towers, vent housings, antenna masts on the tallest buildings, and red
+aviation beacons on anything over 60 m. The beacons are deliberately
+over-bright — with glow on they bloom into the fog and give the skyline a
+readable top edge from across the city, which is what you need when you're
+picking a web anchor at 60 m/s. Street lamps are emissive geometry with no
+`OmniLight` behind them; a real light per lamp across 169 cells would be
+hundreds of point lights for scenery you mostly fly over.
+
+Window emission colour varies per building — cool offices beside warm
+apartments — because one uniform sheet of glass is what makes a procedural
+skyline read as procedural.
+
 ## Animation
 
 The source model ships with no animation clips, so every pose is driven by
@@ -202,6 +228,11 @@ thug is the same mesh recoloured.
 
 - **Never executed** — see *Status*.
 - Building collision is a circle-vs-AABB push-out, not a capsule sweep.
+- Rooftop props and street lamps are decoration only — the collision model is
+  still one box per building, so you can walk through a water tower. Giving
+  each prop a body would mean teaching `resolve_horizontal_collision` about
+  several boxes per cell, which isn't worth it for scenery you're near for a
+  couple of seconds.
 - Wall crawling only handles the four vertical faces of a box — no ceilings, no
   sloped geometry, and corners are a hard switch between faces.
 - One enemy type, one attack, no ranged combat, no multi-thug coordination.
